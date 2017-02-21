@@ -1,0 +1,35 @@
+#!/bin/sh
+
+set -e
+
+# Init variables
+DRUPAL_PROFIL=standard
+SITE_NAME=socle-drupal
+SITE_MAIL=socle-drupal@docker.localhost
+SITE_LOCAL=en
+DB_USER=root
+DB_PASSWORD=root
+DB_HOST=mysql
+DB_PORT=3306
+DB_NAME=drupal
+DRUPAL_ADMIN_PASSWORD=admin
+
+# Build docker images
+docker-compose build
+
+# Start docker containers
+docker-compose up -d --force-recreate
+
+# Waiting for mysql service ready
+while ! docker-compose exec engine mysqladmin ping -h"$DB_HOST" -u"DB_USER" -p"DB_PASSWORD" --silent; do
+    sleep 1
+done
+
+# Install Drupal application
+docker-compose exec engine drush site-install ${DRUPAL_PROFIL} \
+    --site-name="${SITE_NAME}" \
+    --site-mail="${SITE_MAIL}" \
+    --locale="${SITE_LOCAL}" \
+    --db-url=mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME} \
+    --account-pass=${DRUPAL_ADMIN_PASSWORD} \
+    -y #install_configure_form.update_status_module='array(FALSE,FALSE)' || error
