@@ -33,7 +33,6 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: root
     volumes:
       - ./var/mysql:/var/lib/mysql
     labels:
@@ -42,4 +41,4 @@ services:
 networks:
     default:
         external:
-            name: proxy_default
+            name: dockerproxy_default
