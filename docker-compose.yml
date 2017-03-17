@@ -7,6 +7,7 @@ services:
     links:
       - mysql
     volumes:
+      - ./automation/:/var/www/automation
       - ./src/modules/:/var/www/html/modules
       - ./src/profiles/:/var/www/html/profiles
       - ./src/themes/:/var/www/html/themes

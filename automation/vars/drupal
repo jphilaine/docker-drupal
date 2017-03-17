@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+readonly DRUPAL_PROFIL=standard
+readonly SITE_NAME=socle-drupal
+readonly SITE_MAIL=socle-drupal@docker.localhost
+readonly SITE_LOCAL=en
+readonly DRUPAL_ADMIN_PASSWORD=admin

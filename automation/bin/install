@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd ${DIR}
+
+readonly AUTOMATION_DIR_PATH=$(readlink -f ${DIR}/..)
+readonly HOOKS_DIR_PATH=${AUTOMATION_DIR_PATH}/hooks
+readonly APP_DIR_PATH=$(readlink -f ${AUTOMATION_DIR_PATH}/../html)
+
+source ${AUTOMATION_DIR_PATH}/vars/drupal
+source ${AUTOMATION_DIR_PATH}/vars/mysql
+
+cd ${APP_DIR_PATH}
+drush site-install ${DRUPAL_PROFIL} \
+    --site-name="${SITE_NAME}" \
+    --site-mail="${SITE_MAIL}" \
+    --locale="${SITE_LOCAL}" \
+    --db-url=mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME} \
+    --account-pass=${DRUPAL_ADMIN_PASSWORD} \
+    -y #install_configure_form.update_status_module='array(FALSE,FALSE)' || error
